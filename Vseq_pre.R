@@ -12,9 +12,12 @@
 ##  ##
 ##
 
+#Start this program... 
 
+print("Ejecutando")
 
-starttime <- Sys.time()
+#starttime <- Sys.time()
+
 ##########  Biostring instalation   @#########################
 # source("https://bioconductor.org/biocLite.R")
 #biocLite("BiocUpgrade")
@@ -31,6 +34,7 @@ list.of.packages <- c("Maeswrap", "data.table", "ggplot2", "plotrix",
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
+print("Loading Packages...")
 #Load Packages
 library(Maeswrap);library(data.table); library(ggplot2); library(plotrix); library(reshape); library(MASS); library(gridExtra); library(grid); library(plotrix); library(rJava);
 library(xlsx); library(sqldf); library(tcltk2); library(dplyr); library(oce); library(qpcR); library(gdata); library(tcR); library(readxl);
