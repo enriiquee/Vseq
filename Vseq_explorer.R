@@ -1,16 +1,16 @@
 
 
 ##      ###   ##   ###        ##
- ##     #    # #  #  #       ##
-  ##    ###  ###  #  #      ##
-   ##     #  #    #  #     ##         ###################################
-    ##  ###  ###   ###   ##           ###################################
-     ##              #  ##            #######  Vseq_EXPLORER  ###########
-       ##            # ##             ###################################
-        ##           ##               ###################################
-          ##       ##
-            ##  ##
-              ##
+##     #    # #  #  #       ##
+##    ###  ###  #  #      ##
+##     #  #    #  #     ##         ###################################
+##  ###  ###   ###   ##           ###################################
+##              #  ##            #######  Vseq_EXPLORER  ###########
+##            # ##             ###################################
+##           ##               ###################################
+##       ##
+##  ##
+##
 
 
 
@@ -19,7 +19,7 @@
 
 ####################################################################################3
 starttime <- Sys.time()
-   ####################################################################################
+####################################################################################
 
 ##      ###   ##   ###        ##
 ##     #    # #  #  #       ##
@@ -33,7 +33,7 @@ starttime <- Sys.time()
 ##  ##
 ##
 
- seq <- "LSETVAICR"
+seq <- "LSETVAICR"
 # seq <- "GLPDQMLYR"
 # seq <- "LTSSVTAYDYSGK"
 # seq <- "ADGVPIHLK"
@@ -52,7 +52,7 @@ z<-as.matrix(z)
 pas<- paste0("c(", as.character(z), ")")
 
 tvar<-unlist(lapply(pas, 
-                 function(x) sum(eval(parse(text=x)))))
+                    function(x) sum(eval(parse(text=x)))))
 
 
 parental <-sum(tvar)+19.0178
@@ -92,7 +92,7 @@ pb <- winProgressBar(title=paste("Vseq_EXPLORER", "-", seq),
                      label="0% done", min=0, max=100, initial=0)
 
 count = 1
- 
+
 for (ww in x)
 {
   #################################################################################
@@ -101,17 +101,17 @@ for (ww in x)
   ##################################################################################
   sn <- paste0("SCANS=", ww)
   source("C:\\Users\\Administrador\\Desktop\\R_projects\\Vseq_explorer_project2c.R")
- #params <- data.frame(nrow=length(x))
+  #params <- data.frame(nrow=length(x))
   params[[ww]] <-  data.frame(seq,mimMZ,ww,Escore,DeltaMass2c, DeltaMass3c, DeltaMass4c,
-                             DeltaMass5c, DeltaMass6c, matched_ions, out_of)
+                              DeltaMass5c, DeltaMass6c, matched_ions, out_of)
   
   
-    #Sys.sleep(0.1) # slow down the code for illustration purposes
-    info <- sprintf("%d%% done", round((100/length(x)*count)))
+  #Sys.sleep(0.1) # slow down the code for illustration purposes
+  info <- sprintf("%d%% done", round((100/length(x)*count)))
   
-    setWinProgressBar(pb, round((100/length(x)*count)), label=info)
-    
-    count=count +1
+  setWinProgressBar(pb, round((100/length(x)*count)), label=info)
+  
+  count=count +1
   
 }  
 

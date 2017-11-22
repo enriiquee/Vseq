@@ -1,6 +1,6 @@
 
-  #x = 76933
-  #sn <- paste0("SCANS=", x)
+#x = 76933
+#sn <- paste0("SCANS=", x)
 ##########  extracting Charge and XCorr    ############
 
 sub <- subset(sql, FirstScan == x)
@@ -59,7 +59,7 @@ z<-as.matrix(z)
 pas<- paste0("c(", as.character(z), ")")
 
 tre<-unlist(lapply(pas, 
-                 function(x) sum(eval(parse(text=x)))))
+                   function(x) sum(eval(parse(text=x)))))
 
 parental <-sum(tre)+19.0178
 
@@ -159,7 +159,7 @@ for (ipar in 1:len)
   z <- as.data.frame(yn)
   z<-as.matrix(z)
   tpar<-unlist(lapply(paste0("c(", as.character(z), ")"), 
-                   function(x) sum(eval(parse(text=x)))))
+                      function(x) sum(eval(parse(text=x)))))
   fragy <-sum(tpar)+19.0178
   
   #print (parent)
@@ -184,7 +184,7 @@ for (j in 1:len)
   z <- as.data.frame(bn)
   z<-as.matrix(z)
   tpar<-unlist(lapply(paste0("c(", as.character(z), ")"), 
-                   function(x) sum(eval(parse(text=x)))))
+                      function(x) sum(eval(parse(text=x)))))
   fragb <-sum(tpar)+1.0078
   
   #print (parent)
@@ -570,7 +570,7 @@ if(length(deltav1)>0){
   if(deltav1==0){
     deltav1=1
   }
-  }
+}
 
 
 if(is.null(dim(fppm)))
@@ -615,9 +615,9 @@ row_sub = apply(qscore, 1, function(row) all(row !=0 ))
 qscore <- qscore[row_sub,]
 
 if(length(qscore) == 2) 
-      {
-     qscore <- qscoreFALSE
-     }
+{
+  qscore <- qscoreFALSE
+}
 
 Escore <- sum(qscore[,2]/1000000)
 matched_ions = length(qscore)/2
@@ -680,12 +680,12 @@ for (dvar0 in nrow(BDAG):1){
   dvar1 = dvar0-1
   BDAG[dvar1,3] = abs(BDAG[dvar0,2] - BDAG[(dvar1),2])
   for (dvar1 in 1:dvar0){
-  if (BDAG[dvar0,3] <= 7){
-    BDAG[dvar1,4] = BDAG[dvar0,4]+1
-  }
-  else if (BDAG[dvar0,3] > 7){
-    BDAG[dvar1,4] = 0
-  }
+    if (BDAG[dvar0,3] <= 7){
+      BDAG[dvar1,4] = BDAG[dvar0,4]+1
+    }
+    else if (BDAG[dvar0,3] > 7){
+      BDAG[dvar1,4] = 0
+    }
     BDAG[dvar0,5] = BDAG[dvar0,4]+1
   }}
 if (nrow(AsB)==1){
@@ -714,10 +714,10 @@ if (nrow(AsY)==1){
   YDAG <- data.frame(cbind(AsY), dist= 0, value= 0,consec= 0, int= 0, error= 0, count=c(1:nrow(AsY)))
 }
 
-  
+
 
 PTMprob <- strsplit(seq, NULL)[[1]]
-  
+
 
 BDAGmax <- subset(BDAG, BDAG[,4]==max(BDAG[,4]))
 if (nrow(BDAG)==1){
@@ -737,45 +737,45 @@ YDAGmax <- YDAGmax[,1] - len
 
 if (data_type == "DdS"){
   
-pauta <- as.data.frame(gregexpr("\\.", dtafiles[1,1]))  
-remove <- as.data.frame(substr(dtafiles[,1], as.numeric(pauta[1,1]+1), 50))
-remove <- data.frame(as.numeric(sub('\\..*', '', remove[,1])))
-dtamatrix <- cbind(dtafiles, remove)
-dtacolnames <- c("1","2")
-colnames(dtamatrix) <- dtacolnames
-dtamatrix <- dtamatrix[order(dtamatrix$`2`),]
-
-dtamatrix <- subset(dtamatrix, dtamatrix[,2]< x)
-dtamatrix <- dtamatrix[nrow(dtamatrix),]
-
-dta_prec <- read.csv(paste0(dtapath, dtamatrix[1,1]), sep = " ")
-
-prec_bar <- subset(dta_prec, as.numeric(dta_prec[,1]) < massspec+3)
-prec_bar <- subset(prec_bar, as.numeric(prec_bar[,1]) > massspec-3)
-colnames(prec_bar) <- c("mass", "intensity")
-
-if (nrow(prec_bar) == 0){
-  prec_bar <- data.frame("mass"= 1, "intensity"=1)
-}
-
-zero_dta <- matrix(0, nrow=nrow(prec_bar), ncol=1)
-ccu_dta <- matrix(0.01, nrow=nrow(prec_bar), ncol= 1)
-
-
-idea_dta <- prec_bar[,1] - ccu_dta
-m_z_zoom <- c(matrix(c(idea_dta, prec_bar[,1]), 2, byrow = T)) 
-RelInt_dta <- c(matrix(c(zero_dta, prec_bar[,2]), 2, byrow= T))
-
-bind_dta <- cbind(m_z_zoom, RelInt_dta)
-ccu2_dta <- matrix(0.01, nrow = nrow(bind_dta))
-
-bind2_dta <- bind_dta[,1] + ccu2_dta
-morezero_dta <- matrix(0, nrow=nrow(bind2_dta))
-bind3_dta <- c(matrix(c(bind_dta[,1], bind2_dta), 2, byrow = T)) 
-bind4_dta <- c(matrix(c(RelInt_dta, morezero_dta), 2, byrow= T))
-spec_dta <- cbind(bind3_dta, bind4_dta)
-
-specpar_dta <- paste( "MZ=", massspec,",", "Charge=", chargespec, ",Scan=", dtamatrix[,2])
+  pauta <- as.data.frame(gregexpr("\\.", dtafiles[1,1]))  
+  remove <- as.data.frame(substr(dtafiles[,1], as.numeric(pauta[1,1]+1), 50))
+  remove <- data.frame(as.numeric(sub('\\..*', '', remove[,1])))
+  dtamatrix <- cbind(dtafiles, remove)
+  dtacolnames <- c("1","2")
+  colnames(dtamatrix) <- dtacolnames
+  dtamatrix <- dtamatrix[order(dtamatrix$`2`),]
+  
+  dtamatrix <- subset(dtamatrix, dtamatrix[,2]< x)
+  dtamatrix <- dtamatrix[nrow(dtamatrix),]
+  
+  dta_prec <- read.csv(paste0(dtapath, dtamatrix[1,1]), sep = " ")
+  
+  prec_bar <- subset(dta_prec, as.numeric(dta_prec[,1]) < massspec+3)
+  prec_bar <- subset(prec_bar, as.numeric(prec_bar[,1]) > massspec-3)
+  colnames(prec_bar) <- c("mass", "intensity")
+  
+  if (nrow(prec_bar) == 0){
+    prec_bar <- data.frame("mass"= 1, "intensity"=1)
+  }
+  
+  zero_dta <- matrix(0, nrow=nrow(prec_bar), ncol=1)
+  ccu_dta <- matrix(0.01, nrow=nrow(prec_bar), ncol= 1)
+  
+  
+  idea_dta <- prec_bar[,1] - ccu_dta
+  m_z_zoom <- c(matrix(c(idea_dta, prec_bar[,1]), 2, byrow = T)) 
+  RelInt_dta <- c(matrix(c(zero_dta, prec_bar[,2]), 2, byrow= T))
+  
+  bind_dta <- cbind(m_z_zoom, RelInt_dta)
+  ccu2_dta <- matrix(0.01, nrow = nrow(bind_dta))
+  
+  bind2_dta <- bind_dta[,1] + ccu2_dta
+  morezero_dta <- matrix(0, nrow=nrow(bind2_dta))
+  bind3_dta <- c(matrix(c(bind_dta[,1], bind2_dta), 2, byrow = T)) 
+  bind4_dta <- c(matrix(c(RelInt_dta, morezero_dta), 2, byrow= T))
+  spec_dta <- cbind(bind3_dta, bind4_dta)
+  
+  specpar_dta <- paste( "MZ=", massspec,",", "Charge=", chargespec, ",Scan=", dtamatrix[,2])
 }
 
 #################################################################
@@ -822,10 +822,10 @@ layout(m_paroma)
 plot(zoom,int, log = "y",xlim = c(-3,90),asp = 1,
      xlab = "error in ppm______________________  >50", ylab = "intensity(log)",
      pch=21, bg="lightblue", cex=3, col = "purple", cex.lab=2)
-     abline(v=err, col="blue", lty=2)
-     title(prot, cex.main=1.5, col.main= "darkblue")
-      
-      
+abline(v=err, col="blue", lty=2)
+title(prot, cex.main=1.5, col.main= "darkblue")
+
+
 my_palette <- colorRampPalette(c("red","green","blue","orange","grey"))(z)
 levels<-c(0,1,3,5,7,9,12,15,18,21,30:z)
 #ndm <-  1:nrow(namesdm)
@@ -833,7 +833,7 @@ levels<-c(0,1,3,5,7,9,12,15,18,21,30:z)
 #ndm2 = c(3,5)
 
 p1 <- levelplot(fppm, col.regions=my_palette, levels=levels, main= list(label=mainT, 
-                cex= 2),
+                                                                        cex= 2),
                 xlab=list(label="b series --------- y series", cex=2),
                 ylab=list(label="large--Exp.masses--small", cex= 2), aspect = "fill",
                 panel = function(...){
@@ -846,10 +846,10 @@ p1 <- levelplot(fppm, col.regions=my_palette, levels=levels, main= list(label=ma
                 })
 
 if (data_type == "DdS"){
-plot(m_z_zoom ,RelInt_dta, cex=0, lines(spec_dta, col="darkblue", lty=1, lwd=2),
-     xlab="m/z", ylab = "Intensity", cex.lab=2) 
-title(specpar_dta, cex.main=2, col.main= "darkblue")
-abline(v=massspec, col="green", lty=3, lwd=5)
+  plot(m_z_zoom ,RelInt_dta, cex=0, lines(spec_dta, col="darkblue", lty=1, lwd=2),
+       xlab="m/z", ylab = "Intensity", cex.lab=2) 
+  title(specpar_dta, cex.main=2, col.main= "darkblue")
+  abline(v=massspec, col="green", lty=3, lwd=5)
 }
 
 if (data_type == "DiS"){
@@ -866,33 +866,33 @@ print(p1, split=c(2,2,2,2), more=TRUE)
 plot.new()
 
 textbox(c(0,0.6), 1, c("FirstScan=",x,"Xcorr=",Xcorr,
-                         "Charge=",Charge,"SQL-Sequence=",seql,"RT=",rt,
-                         "DeltaM=", DeltaMass, "Escore=", Escore, "m.Mass=", mim)
-                          ,cex= 2.1,col="blue", border = FALSE)
+                       "Charge=",Charge,"SQL-Sequence=",seql,"RT=",rt,
+                       "DeltaM=", DeltaMass, "Escore=", Escore, "m.Mass=", mim)
+        ,cex= 2.1,col="blue", border = FALSE)
 if (DMSS > 1){
-textbox(c(0.6,0.9), 1, c("PTM pinpointing:","Bseries=",PTMprob[BDAGmax[,1]],BDAGmax[,1],"Yseries=",PTMprob[YDAGmax],YDAGmax)
-                         ,cex= 2.1,col="red", border = FALSE)}
+  textbox(c(0.6,0.9), 1, c("PTM pinpointing:","Bseries=",PTMprob[BDAGmax[,1]],BDAGmax[,1],"Yseries=",PTMprob[YDAGmax],YDAGmax)
+          ,cex= 2.1,col="red", border = FALSE)}
 if (DMSS < 1) {
-textbox(c(0.6,0.9), 1, c("unmodified peptide")
+  textbox(c(0.6,0.9), 1, c("unmodified peptide")
           ,cex= 2.1,col="red", border = FALSE)}
 
 
 plot(m_z ,RelInt, cex=0, lines(spec, col="darkblue", lty=1, lwd=2),
      xlab="m/z", ylab = "Relative Intensity", cex.lab=2) 
-     title(specpar, cex.main=2, col.main= "darkblue")
-     abline(v=matches[,1], col="orange", lty=2)
-     for (pri in 1:nrow(proof)){
-     
-      text(proofb[pri,1], y= proofb[pri,3], labels = proofb[pri,2], cex = 2, col = "red")
-      text(proofy[pri,1], y= proofy[pri,3], labels = proofy[pri,2], cex = 2, col = "blue")
-      
-           }
+title(specpar, cex.main=2, col.main= "darkblue")
+abline(v=matches[,1], col="orange", lty=2)
+for (pri in 1:nrow(proof)){
+  
+  text(proofb[pri,1], y= proofb[pri,3], labels = proofb[pri,2], cex = 2, col = "red")
+  text(proofy[pri,1], y= proofy[pri,3], labels = proofy[pri,2], cex = 2, col = "blue")
+  
+}
 
 
 dev.off()
 
 params <- data.frame(x, seq,mim, Charge, Xcorr, Escore, rt, DeltaMass, 
-                    prot, matched_ions, out_of, massspec)
+                     prot, matched_ions, out_of, massspec)
 
 
 

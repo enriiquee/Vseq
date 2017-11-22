@@ -24,7 +24,7 @@ z<-as.matrix(z)
 pas<- paste0("c(", as.character(z), ")")
 
 tpar<-unlist(lapply(pas, 
-                 function(x) sum(eval(parse(text=x)))))
+                    function(x) sum(eval(parse(text=x)))))
 
 
 
@@ -63,7 +63,7 @@ for (ipar in 1:len)
   z <- as.data.frame(yn)
   z<-as.matrix(z)
   tpar<-unlist(lapply(paste0("c(", as.character(z), ")"), 
-                   function(x) sum(eval(parse(text=x)))))
+                      function(x) sum(eval(parse(text=x)))))
   fragy <-sum(tpar)+19.0178
   
   #print (parent)
@@ -89,7 +89,7 @@ for (j in 1:len)
   z <- as.data.frame(bn)
   z<-as.matrix(z)
   tpar<-unlist(lapply(paste0("c(", as.character(z), ")"), 
-                   function(x) sum(eval(parse(text=x)))))
+                      function(x) sum(eval(parse(text=x)))))
   fragb <-sum(tpar)+1.0078
   
   #print (parent)
