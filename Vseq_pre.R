@@ -12,34 +12,6 @@
 ##  ##
 ##
 
-#Start this program... 
-
-print("Ejecutando")
-
-#starttime <- Sys.time()
-
-##########  Biostring instalation   @#########################
-# source("https://bioconductor.org/biocLite.R")
-#biocLite("BiocUpgrade")
-#biocLite("Biostrings")
-
-
-#Installation of Packages that we need. 
-
-list.of.packages <- c("Maeswrap", "data.table", "ggplot2", "plotrix", 
-                      "reshape", "MASS", "gridExtra", "grid", "plotrix", 
-                      "rJava", "xlsx", "sqldf", "tcltk2", "dplyr", "oce", 
-                      "qpcR", "gdata", "tcR", "stats", "XLConnect")
-
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
-print("Loading Packages...")
-#Load Packages
-library(Maeswrap);library(data.table); library(ggplot2); library(plotrix); library(reshape); library(MASS); library(gridExtra); library(grid); library(plotrix); library(rJava);
-library(xlsx); library(sqldf); library(tcltk2); library(dplyr); library(oce); library(qpcR); library(gdata); library(tcR); library(readxl);
-library(stats); library(XLConnect); library(Biostrings)
-
 
 ##monoisotopic masses aa###
 A=71.03711
@@ -385,28 +357,28 @@ o= O + isobLab
 
 #####    preparando matriz de fragmentos experimentales    ###
 
-data_type <- "DiS" #CAMBIAR SI ES UN DiS o DdS
-experimento <- "SDR" 
+#data_type <- "DiS" #CAMBIAR SI ES UN DiS o DdS
+#experimento <- "SDR" 
 
-datapath <- "C:/Users/Proteomica VI/Desktop/Nuevo Vseq/Datos/" #Donde estan todos los ficheros.
+#datapath <- "C:/Users/Proteomica VI/Desktop/Nuevo Vseq/Datos/" #Donde estan todos los ficheros.
 #dtapath <- "E:\\NT_scaf1\\RH_Heart_TMTHF_FR7.dta\\"   #Solo si es DDS
 ###########  only to get the precursor assinged information ##################
 # experimento <- "3_Fr7"
 # datapath <- "F:\\carotideos\\"
 
-starttime <- Sys.time()
+#starttime <- Sys.time()
 
-infile = paste0(datapath, experimento, ".mgf")  ## datos de las fragmentaciones mgf
+#infile = paste0(datapath, experimento, ".mgf")  ## datos de las fragmentaciones mgf
 
-infile2 = paste0(datapath, experimento, ".xlsx")  ##  datos del query SQL
+#infile2 = paste0(datapath, experimento, ".xlsx")  ##  datos del query SQL
 
-library(readxl)
-sql <- read_excel(infile2)
+#library(readxl)
 
-library(readr)
-fr_ns <- read_delim("C:/Users/Proteomica VI/Desktop/Nuevo Vseq/Datos/SDR.mgf", 
-                    "\t", escape_double = FALSE, col_names = FALSE, 
-                    trim_ws = TRUE)
+# sql <- read_excel(infile2)
+# 
+# fr_ns <- read_delim("C:/Users/Proteomica VI/Desktop/Nuevo Vseq/Datos/SDR.mgf", 
+#                     "\t", escape_double = FALSE, col_names = FALSE, 
+                   # trim_ws = TRUE)
 
 #fr_ns <- read.table(infile, sep = "\n")
 
@@ -417,7 +389,12 @@ fr_ns <- read_delim("C:/Users/Proteomica VI/Desktop/Nuevo Vseq/Datos/SDR.mgf",
 #################################################################################
 ###################################################################################
 
+#Extract SCANS 
 squery <- filter(fr_ns, grepl("SCANS",  X1))
+#Remove the word SCAN=
+
+
+
 hsquery <- data.frame(X1=gsub('SCANS=', '', squery$X1)) #Nueva versión
 #hsquery <- as.data.frame(substr(squery[,'X1'], 7, 20))
 mquery <- filter(fr_ns, grepl("PEPMASS", X1))
