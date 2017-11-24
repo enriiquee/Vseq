@@ -86,7 +86,7 @@ repeat{
       #Extract SCANS 
       squery <- filter(fr_ns, grepl("SCANS",  X1))
       #Remove the word SCAN=
-      squery2 <- data.frame(SCAN=gsub('SCANS=', '', squery$X1)) 
+      squery <- data.frame(SCAN=gsub('SCANS=', '', squery$X1)) 
       
       
       #Take PEPMASS
@@ -96,26 +96,23 @@ repeat{
       #Splited in two, having MZ and Intensity. 
       mquery <- separate(data = mquery, col = MASS, into = c("MASS", "INT"), sep = "\\s")
       
-      
-
-      
-      #### Testing
-      
-      
-      #hsquery <- as.data.frame(substr(squery[,'X1'], 7, 20))
+            #Take Change: 
       cquery <- filter(fr_ns, grepl("CHARGE", X1))
       
+      #Finally we merge last columns
+      tquery <- cbind(squery, mquery, cquery)
+      colnames(tquery) <- c("SCAN", "MZ", "INTENSITY", "CHARGE")
       
       
-      
-      
-      tquery <- cbind(hsquery, mquery, cquery)
-      
-      names(tquery)[1] <- "SCAN"
-      names(tquery)[2] <- "MASS"
-      
-      
-      
+      tquery <- transform(tquery, MZ = as.numeric(MZ), 
+                     INTENSITY = as.numeric(INTENSITY), SCAN= as.numeric(SCAN))
+
+      #Clean JAVA menory:
+      xlcFreeMemory()
+      #Export
+      write.xlsx2(tquery, file=file.path(getwd(), "Datos2/asdf.xlsx"), sheetName="sheet1", row.names=FALSE)
+      #We clean again: 
+      xlcFreeMemory()
       
       
       
