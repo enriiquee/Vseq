@@ -38,11 +38,14 @@ repeat{
   
   #Creamos la carpeta Datos, donde almacenamos los archivos que son necesarios. 
   output_dir <- file.path(getwd(), "Datos2")
+  output_dir2 <- file.path(getwd(), "Vseq_Graphs")
   
-  if (!dir.exists(output_dir)){
+  if (!dir.exists(output_dir) & !dir.exists(output_dir2)){
     dir.create(output_dir)
+    dir.create(output_dir2)
+    
   } else {
-    print("La carpeta Datos ya existe")
+    print("La carpeta Datos y R_graphs ya existe")
   }
   
   
@@ -69,6 +72,11 @@ repeat{
       }
       if (length(infile2)<1){
         cat("El archivo Excel no existe en la carpeta Datos")
+        break
+      }
+      
+      if (length(infile)>1 | lenght(infile2)>1){
+        cat("Hay más de un archivo mgf o xlsx en la carpeta datos")
         break
       }
       
@@ -110,14 +118,27 @@ repeat{
       #Clean JAVA menory:
       xlcFreeMemory()
       #Export
-      write.xlsx2(tquery, file=file.path(getwd(), "Datos2/asdf.xlsx"), sheetName="sheet1", row.names=FALSE)
+      write.xlsx2(tquery, file=file.path(getwd(), "Datos2/tquery.xlsx"), sheetName="sheet1", row.names=FALSE)
       #We clean again: 
       xlcFreeMemory()
       
       
+      #Run the rest of the programs. 
+      setwd(file.path(getwd()))
+      source('Vseq_pre.R')
       
+      #Open the tquery table and filter by MS
       
+      readline(prompt="El archivo tquery se ha creado. Abrelo y selecciona la masa que quieres buscar. \n 
+               PULSE ENTER TO CONTINUE [ENTER]")     
       
+      cat("Introduzca el número de MZ seleccionado: ")
+      input_MZ <- readLines(file("stdin"),1)#enter "yes"
+      
+      cat("Introduzca la tolerancia de +- MZ: ")
+      input_tolerance <- readLines(file("stdin"),1)#enter "yes"
+      
+      subset(tquery, tquery$MZ>457.0 & tquery$MZ<458.0)
       
       
       break

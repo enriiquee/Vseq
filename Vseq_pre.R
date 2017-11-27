@@ -1,6 +1,6 @@
-
-
-##       ###   ##   ###        ##
+##                                ##
+##                              ##
+##      ###   ##   ###        ##
 ##     #    # #  #  #       ##
 ##    ###  ###  #  #      ##
 ##     #  #    #  #     ##
@@ -42,11 +42,11 @@ Sp=S+ 79.966331
 Tp=T+ 79.966331 
 Yp=Y+ 79.966331  
 
-AAS <- c(A,R,N,D,C,E,G,H,L,K,M,F,P,S,T,W,Y,V,B, Sp, Tp, Yp)
+AAS <- c(A,R,N,D,C,E,G,H,L,K,M,F,P,S,T,W,Y,V,Sp, Tp, Yp)#,B)
 AASch <- c("A","R","N","D","C","E","G","H","L","K","M","F",
            "P","S","T","W","Y","V","B", "Sp","Tp", "Yp")
 
-#
+#Aminoacid
 
 A2=71.03711/2 
 R2=156.10111/2
@@ -390,64 +390,64 @@ o= O + isobLab
 ###################################################################################
 
 #Extract SCANS 
-squery <- filter(fr_ns, grepl("SCANS",  X1))
+#squery <- filter(fr_ns, grepl("SCANS",  X1))
 #Remove the word SCAN=
 
 
 
-hsquery <- data.frame(X1=gsub('SCANS=', '', squery$X1)) #Nueva versión
+#hsquery <- data.frame(X1=gsub('SCANS=', '', squery$X1)) #Nueva versión
 #hsquery <- as.data.frame(substr(squery[,'X1'], 7, 20))
-mquery <- filter(fr_ns, grepl("PEPMASS", X1))
-cquery <- filter(fr_ns, grepl("CHARGE", X1))
+#mquery <- filter(fr_ns, grepl("PEPMASS", X1))
+#cquery <- filter(fr_ns, grepl("CHARGE", X1))
 
 
 
 
 
-tquery <- cbind(hsquery, mquery, cquery)
+#tquery <- cbind(hsquery, mquery, cquery)
 
-names(tquery)[1] <- "SCAN"
-names(tquery)[2] <- "MASS"
+#names(tquery)[1] <- "SCAN"
+#names(tquery)[2] <- "MASS"
 
-mssquery <- gsub('PEPMASS=', '', tquery$MASS) #Eliminamos PEPMASS
+#mssquery <- gsub('PEPMASS=', '', tquery$MASS) #Eliminamos PEPMASS
 
-sssquery <- data.frame(sub("$", ",", tquery$SCAN)) #Aqui le añade una coma
+#sssquery <- data.frame(sub("$", ",", tquery$SCAN)) #Aqui le añade una coma
 #sssquery <- sub("^", "'", sssquery)
 
 #write.csv(sssquery, "C:\\Users\\proteomica\\Desktop\\R_projects\\PESA\\sssquery.csv")
 
 
-spl <- colsplit.character(mssquery, split = " ", names(c("MZ", "INT"))) #Divide la columna en dos aprovechando el espacio.
-
-spl <- as.data.frame(spl)
-
-ssl <- as.data.frame(sssquery)
-
-
-tquery <- cbind(ssl, spl, cquery)
-
-names(tquery)[1] <- "SCAN"
-names(tquery)[2] <- "MZ"
-names(tquery)[3] <- "INTENSITY"
-names(tquery)[4] <- "CHARGE"
-
-varcon4 <- paste0(datapath,"tquery_",experimento, ".csv")
-
-#Usamos este que es el bueno: 
-
-#Clean JAVA menory:
-xlcFreeMemory()
-#Export
-write.xlsx2(tquery, file="tquery.xlsx", sheetName="sheet1", row.names=FALSE)
-#We clean again: 
-xlcFreeMemory()
-
-
-
-##########################################################################################################
-##########################################################################################################
-endtime <- Sys.time()
-
-print(paste("from-",starttime,"-","to", "-", endtime))
+# spl <- colsplit.character(mssquery, split = " ", names(c("MZ", "INT"))) #Divide la columna en dos aprovechando el espacio.
+# 
+# spl <- as.data.frame(spl)
+# 
+# ssl <- as.data.frame(sssquery)
+# 
+# 
+# tquery <- cbind(ssl, spl, cquery)
+# 
+# names(tquery)[1] <- "SCAN"
+# names(tquery)[2] <- "MZ"
+# names(tquery)[3] <- "INTENSITY"
+# names(tquery)[4] <- "CHARGE"
+# 
+# varcon4 <- paste0(datapath,"tquery_",experimento, ".csv")
+# 
+# #Usamos este que es el bueno: 
+# 
+# #Clean JAVA menory:
+# xlcFreeMemory()
+# #Export
+# write.xlsx2(tquery, file="tquery.xlsx", sheetName="sheet1", row.names=FALSE)
+# #We clean again: 
+# xlcFreeMemory()
+# 
+# 
+# 
+# ##########################################################################################################
+# ##########################################################################################################
+# endtime <- Sys.time()
+# 
+# print(paste("from-",starttime,"-","to", "-", endtime))
 
 #########################################################################################################
