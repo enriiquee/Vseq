@@ -2,63 +2,18 @@
 #This program allows to run all the programs, avoiding execution by parts.
 #
 
-#Starting the program... 
 
-print("Ejecutando")
+#Suppress warnings globally. Avoid error printed
+options(warn = -1)
+cat("Ejecutando... Puede tardar un poco... \n\n")
 
-#starttime <- Sys.time()
-
-##########  Biostring instalation   @#########################
-# source("https://bioconductor.org/biocLite.R")
-#biocLite("BiocUpgrade")
-#biocLite("Biostrings")
-
-
-#Installation of Packages that we need. 
-
-list.of.packages <- c("Maeswrap", "data.table", "ggplot2", "plotrix", 
-                      "reshape", "MASS", "gridExtra", "grid", "plotrix", 
-                      "rJava", "xlsx", "sqldf", "tcltk2", "dplyr", "oce", 
-                      "qpcR", "gdata", "tcR", "stats", "XLConnect", "readr", "readxl", "tidyr", "rJava")
-
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
-print("Loading Packages...")
-#Load Packages
-library(Maeswrap);
-library(data.table);
-library(ggplot2);
-library(plotrix);
-library(reshape);
-library(MASS);
-library(gridExtra);
-library(grid);
-library(plotrix);
-library(rJava);
-library(xlsx);
-library(sqldf);
-library(tcltk2);
-library(dplyr);
-library(oce);
-library(qpcR);
-library(gdata);
-library(tcR);
-library(readxl);
-library(stats);
-library(XLConnect);
-library(Biostrings);
-library(readr);
-library(readxl);
-library(tidyr)
+#Load packages. 
+#Run the rest of the programs. 
+setwd(file.path(getwd(),"Programa_R/"))
+source('Vseq_Packages.R' )
+setwd('..')
 
 
-#Clean console
-shell(cat("\014")  )
-
-
-
-  
   #Creamos la carpeta Datos, donde almacenamos los archivos que son necesarios. 
   output_dir <- file.path(getwd(), "Datos3")
   output_dir2 <- file.path(getwd(), "Vseq_Graphs")
@@ -68,7 +23,7 @@ shell(cat("\014")  )
     dir.create(output_dir2)
     
   } else {
-    print("La carpeta Datos y R_graphs ya existe")
+    cat("La carpeta Datos y R_graphs ya existe")
   }
   
   
@@ -86,45 +41,70 @@ shell(cat("\014")  )
       cat("\n Mete en la carpeta Datos el archivo .xlsx exportado de cualquier motor de busqueda y el mgf. 
                \n Press [enter] to continue")
       word <- readLines(file("stdin"),1) 
-      print(word)
       if (word==""){
         break
       }
-      
       }
       data_type <- "DiS" #CAMBIAR SI ES UN DiS o DdS
       experimento <- "SDR" 
       
-      #Load files 
-      infile <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.mgf$") 
-      infile2 <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.xlsx$") 
-      
-      #This test if the file is in the folder. If not BREAK. 
-      repeat{ 
+      #This test if the file is in the folder. 
+
+      repeat{
+        #Load files 
+        infile <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.mgf$") 
+        infile2 <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.xlsx$") 
       if (length(infile)<1){
-        cat("El archivo mgf no está en la carpeta Datos \n")
+        cat("El archivo mgf no está en la carpeta Datos. Mete el archivo y pulsa [ENTER] \n")
+        repeat{
+          word <- readLines(file("stdin"),1) 
+          if (word==""){
+            break
+          }
+        }
         
       }
-      if (length(infile2)<1){
-        cat("El archivo Excel no existe en la carpeta Datos \n")
+      else if (length(infile2)<1){
+        cat("El archivo Excel no existe en la carpeta Datos. Mete el archivo y pulsa [ENTER] \n")
+        repeat{
+          word <- readLines(file("stdin"),1) 
+          if (word==""){
+            break
+          }
+        }
         
       }
       
-      if (length(infile)>1 | length(infile2)>1){
-        cat("Hay más de un archivo mgf o xlsx en la carpeta datos \n")
+      else if (length(infile)>1 | length(infile2)>1){
+        cat("Hay más de un archivo mgf o xlsx en la carpeta datos. Elimina los archivos extra y pulsa [ENTER] \n")
+        repeat{
+          word <- readLines(file("stdin"),1) 
+          if (word==""){
+            break
+          }
+        }
         
       }
-      if (length(infile)==1 | length(infile2==1)){
+      else if (length(infile)==1 | length(infile2==1)){
         break
-      } 
       }
+      else{
+        cat("Hay algún problema con los archivos. Revisa que todo esté bien")
+      }
+      }
+
+      cat("Ejecutando... Puede tardar un poco")
       
       #Load data frame. 
       sql <-  read_excel(file.path(getwd(), "Datos3", infile2[1]))
       
       fr_ns <- read_delim(file.path(getwd(), "Datos3", infile[1]), 
                           "\t", escape_double = FALSE, col_names = FALSE, 
-                          trim_ws = TRUE)
+                          trim_ws = TRUE, col_types = cols())
+      
+
+      
+      
       
       #################        Get the query file   ##################################
       #################################################################################
@@ -164,24 +144,54 @@ shell(cat("\014")  )
       #Run the rest of the programs. 
       setwd(file.path(getwd(),"Programa_R/"))
       source('Vseq_pre.R')
+      setwd('..')
+      
       
       #Open the tquery table and filter by MS
-      break
       
+      cat("\n El archivo Tquery se ha creado en la carpeta Datos. \n")
+########################################################################################
+      #Añadir. isnumber <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",x)
+      repeat{
+        cat("\n Selecciona la masa Target que quieres buscar. Escribela y pulsa [ENTER]: \n")
+        input_MZ <- as.numeric(readLines(file("stdin"),1)) 
+        
+        as.character(input_MZ)
+        if(grepl("[^[:digit:]\\.-]",input_MZ)){
+          cat("Esto no es un número")
+        }else if(input_MZ==""){
+          cat("Esto no es un número")
+        }else{
+          break}
+      }
       
-      readline(prompt="El archivo tquery se ha creado. Abrelo y selecciona la masa que quieres buscar. \n 
-               PULSE ENTER TO CONTINUE [ENTER]")  
+      repeat{
+        cat("Selecciona la tolerancia (Ventana de MS) que quieres buscar: \n")
+        input_tolerance <- as.numeric(readLines(file("stdin"),1)) 
+        
+        as.character(input_tolerance)
+        
+        if(grepl("[^[:digit:]\\.-]",input_tolerance)){
+          cat("Esto no es un número")
+        }else if(input_tolerance==""){
+          cat("Esto no es un número")
+        }else{
+          break}
+        
+        
+      }
+        
+         
+      }
       
+      tquery2 <- data.frame(subset(tquery, tquery$MZ>(input_MZ-input_tolerance) & tquery$MZ<(input_MZ+input_tolerance)))
       
+      xlcFreeMemory()
+      #Export
       
-      cat("Introduzca el número de MZ seleccionado: ")
-      input_MZ <- readLines(file("stdin"),1)#enter "yes"
-      
-      cat("Introduzca la tolerancia de +- MZ: ")
-      input_tolerance <- readLines(file("stdin"),1)#enter "yes"
-      
-      tquery2 <- data.frame(subset(tquery, tquery$MZ>(input_MZ-input_input_tolerance) & tquery$MZ<(input_MZ+input_tolerance)))
-      
+      write.xlsx2(tquery2, file=file.path(getwd(), "Datos3/tquery_filter.xlsx"), sheetName="sheet1", row.names=FALSE)
+      #We clean again: 
+      xlcFreeMemory()
       
       break
     }
