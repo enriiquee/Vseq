@@ -78,7 +78,7 @@ print(parental7c)
 ##########################################################################
 ##################    ####################################
 
-x = t(read.table("E:\\Vseq\\SDR_eca_explorer3.csv"))
+#x = t(read.table("E:\\Vseq\\SDR_eca_explorer3.csv"))
 
 
 ###################################################################################
@@ -100,7 +100,14 @@ for (ww in x)
   ################################################################################
   ##################################################################################
   sn <- paste0("SCANS=", ww)
-  source("C:\\Users\\Administrador\\Desktop\\R_projects\\Vseq_explorer_project2c.R")
+  
+  
+  setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
+  source('Vseq_explorer_project2c.R') #Ejecutamos Vseq_pre
+  setwd('..') #Volvemos al anterior directorio
+  
+  
+  #source("C:\\Users\\Administrador\\Desktop\\R_projects\\Vseq_explorer_project2c.R")
   #params <- data.frame(nrow=length(x))
   params[[ww]] <-  data.frame(seq,mimMZ,ww,Escore,DeltaMass2c, DeltaMass3c, DeltaMass4c,
                               DeltaMass5c, DeltaMass6c, matched_ions, out_of)

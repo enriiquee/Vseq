@@ -14,46 +14,47 @@ source('Vseq_Packages.R' )
 setwd('..')
 
 
-  #Creamos la carpeta Datos, donde almacenamos los archivos que son necesarios. 
-  output_dir <- file.path(getwd(), "Datos3")
-  output_dir2 <- file.path(getwd(), "Vseq_Graphs")
+#Creamos la carpeta Datos, donde almacenamos los archivos que son necesarios. 
+output_dir <- file.path(getwd(), "Datos3")
+output_dir2 <- file.path(getwd(), "Vseq_Graphs")
   
-  if (!dir.exists(output_dir) & !dir.exists(output_dir2)){
-    dir.create(output_dir)
-    dir.create(output_dir2)
-    
-  } else {
-    cat("La carpeta Datos y R_graphs ya existe")
-  }
+if (!dir.exists(output_dir) & !dir.exists(output_dir2)){
+  dir.create(output_dir)
+  dir.create(output_dir2)
+  
+} else {
+  cat("La carpeta Datos y R_graphs ya existe")
+}
   
   
-  repeat{
-    cat("¿Que tipo de datos tienes, DiS o DdS? Por defecto se suele seleccionar DiS.\n ")
-    cat("1. DiS | 2. DdS\n")
-    input_answer <- readLines(file("stdin"),1)#enter "yes"
-    
-    if (input_answer=="DiS" | input_answer==1 )  {
-      
-      #readline(prompt="\n Mete en la carpeta Datos el archivo xlsx exportado de cualquier motor de busqueda y el mgf. 
-              # \n Press [enter] to continue")
-      
-      repeat{
+repeat{
+  cat("¿Que tipo de datos tienes, DiS o DdS? Por defecto se suele seleccionar DiS.\n ")
+  cat("1. DiS | 2. DdS\n")
+  input_answer <- readLines(file("stdin"),1)#enter "yes"
+
+  if (input_answer=="DiS" | input_answer==1 )  {
+
+    #readline(prompt="\n Mete en la carpeta Datos el archivo xlsx exportado de cualquier motor de busqueda y el mgf. 
+    # \n Press [enter] to continue")
+
+    repeat{
       cat("\n Mete en la carpeta Datos el archivo .xlsx exportado de cualquier motor de busqueda y el mgf. 
-               \n Press [enter] to continue")
+      \n Press [enter] to continue")
       word <- readLines(file("stdin"),1) 
       if (word==""){
-        break
+      break
       }
-      }
-      data_type <- "DiS" #CAMBIAR SI ES UN DiS o DdS
-      experimento <- "SDR" 
-      
-      #This test if the file is in the folder. 
+    }
+    #Establecemos las variables.
+    data_type <- "DiS" #CAMBIAR SI ES UN DiS o DdS
+    experimento <- "SDR" 
 
-      repeat{
-        #Load files 
-        infile <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.mgf$") 
-        infile2 <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.xlsx$") 
+    #This test if the file is in the folder. 
+
+    repeat{
+      #Load files 
+      infile <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.mgf$") 
+      infile2 <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.xlsx$") 
       if (length(infile)<1){
         cat("El archivo mgf no está en la carpeta Datos. Mete el archivo y pulsa [ENTER] \n")
         repeat{
@@ -62,19 +63,18 @@ setwd('..')
             break
           }
         }
-        
       }
+      
       else if (length(infile2)<1){
-        cat("El archivo Excel no existe en la carpeta Datos. Mete el archivo y pulsa [ENTER] \n")
+      cat("El archivo Excel no existe en la carpeta Datos. Mete el archivo y pulsa [ENTER] \n")
         repeat{
           word <- readLines(file("stdin"),1) 
           if (word==""){
             break
           }
         }
-        
       }
-      
+
       else if (length(infile)>1 | length(infile2)>1){
         cat("Hay más de un archivo mgf o xlsx en la carpeta datos. Elimina los archivos extra y pulsa [ENTER] \n")
         repeat{
@@ -83,130 +83,146 @@ setwd('..')
             break
           }
         }
-        
       }
+
       else if (length(infile)==1 | length(infile2==1)){
         break
       }
+
       else{
         cat("Hay algún problema con los archivos. Revisa que todo esté bien")
       }
-      }
-
-      cat("Ejecutando... Puede tardar un poco")
-      
-      #Load data frame. 
-      sql <-  read_excel(file.path(getwd(), "Datos3", infile2[1]))
-      
-      fr_ns <- read_delim(file.path(getwd(), "Datos3", infile[1]), 
-                          "\t", escape_double = FALSE, col_names = FALSE, 
-                          trim_ws = TRUE, col_types = cols())
-      
-
-      
-      
-      
-      #################        Get the query file   ##################################
-      #################################################################################
-      ###################################################################################
-      #Extract SCANS 
-      squery <- filter(fr_ns, grepl("SCANS",  X1))
-      #Remove the word SCAN=
-      squery <- data.frame(SCAN=gsub('SCANS=', '', squery$X1)) 
-      
-      
-      #Take PEPMASS
-      mquery <- filter(fr_ns, grepl("PEPMASS", X1))
-      #Remove name PEPMASS=
-      mquery <- data.frame(MASS=gsub('PEPMASS=', '', mquery$X1)) #Eliminamos PEPMASS
-      #Splited in two, having MZ and Intensity. 
-      mquery <- separate(data = mquery, col = MASS, into = c("MASS", "INT"), sep = "\\s")
-      
-            #Take Change: 
-      cquery <- filter(fr_ns, grepl("CHARGE", X1))
-      
-      #Finally we merge last columns
-      tquery <- cbind(squery, mquery, cquery)
-      colnames(tquery) <- c("SCAN", "MZ", "INTENSITY", "CHARGE")
-      
-      
-      tquery <- transform(tquery, MZ = as.numeric(MZ), 
-                     INTENSITY = as.numeric(INTENSITY), SCAN= as.numeric(SCAN))
-
-      #Clean JAVA menory:
-      xlcFreeMemory()
-      #Export
-      write.xlsx2(tquery, file=file.path(getwd(), "Datos3/tquery.xlsx"), sheetName="sheet1", row.names=FALSE)
-      #We clean again: 
-      xlcFreeMemory()
-      
-      
-      #Run the rest of the programs. 
-      setwd(file.path(getwd(),"Programa_R/"))
-      source('Vseq_pre.R')
-      setwd('..')
-      
-      
-      #Open the tquery table and filter by MS
-      
-      cat("\n El archivo Tquery se ha creado en la carpeta Datos. \n")
-########################################################################################
-      #Añadir. isnumber <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",x)
-      repeat{
-        cat("\n Selecciona la masa Target que quieres buscar. Escribela y pulsa [ENTER]: \n")
-        input_MZ <- as.numeric(readLines(file("stdin"),1)) 
-        
-        as.character(input_MZ)
-        if(grepl("[^[:digit:]\\.-]",input_MZ)){
-          cat("Esto no es un número")
-        }else if(input_MZ==""){
-          cat("Esto no es un número")
-        }else{
-          break}
-      }
-      
-      repeat{
-        cat("Selecciona la tolerancia (Ventana de MS) que quieres buscar: \n")
-        input_tolerance <- as.numeric(readLines(file("stdin"),1)) 
-        
-        as.character(input_tolerance)
-        
-        if(grepl("[^[:digit:]\\.-]",input_tolerance)){
-          cat("Esto no es un número")
-        }else if(input_tolerance==""){
-          cat("Esto no es un número")
-        }else{
-          break}
-        
-        
-      }
-        
-         
-      }
-      
-      tquery2 <- data.frame(subset(tquery, tquery$MZ>(input_MZ-input_tolerance) & tquery$MZ<(input_MZ+input_tolerance)))
-      
-      xlcFreeMemory()
-      #Export
-      
-      write.xlsx2(tquery2, file=file.path(getwd(), "Datos3/tquery_filter.xlsx"), sheetName="sheet1", row.names=FALSE)
-      #We clean again: 
-      xlcFreeMemory()
-      
-      break
     }
+
+    cat("Ejecutando... Puede tardar un poco")
+
+    #Load data frame. 
+    sql <-  read_excel(file.path(getwd(), "Datos3", infile2[1]))
+
+    fr_ns <- read_delim(file.path(getwd(), "Datos3", infile[1]), 
+            "\t", escape_double = FALSE, col_names = FALSE, 
+            trim_ws = TRUE, col_types = cols())
+
+
+
+
+
+    #################        Get the query file   ##################################
+    #################################################################################
+    ###################################################################################
+    #Extract SCANS 
+    squery <- filter(fr_ns, grepl("SCANS",  X1))
+    #Remove the word SCAN=
+    squery <- data.frame(SCAN=gsub('SCANS=', '', squery$X1)) 
+
+
+    #Take PEPMASS
+    mquery <- filter(fr_ns, grepl("PEPMASS", X1))
+    #Remove name PEPMASS=
+    mquery <- data.frame(MASS=gsub('PEPMASS=', '', mquery$X1)) #Eliminamos PEPMASS
+    #Splited in two, having MZ and Intensity. 
+    mquery <- separate(data = mquery, col = MASS, into = c("MASS", "INT"), sep = "\\s")
+
+    #Take Change: 
+    cquery <- filter(fr_ns, grepl("CHARGE", X1))
+
+    #Finally we merge last columns
+    tquery <- cbind(squery, mquery, cquery)
+    colnames(tquery) <- c("SCAN", "MZ", "INTENSITY", "CHARGE")
+
+    #Transformamos el tipo de dato para que Excel lo coja adecuadamente. 
+    tquery <- transform(tquery, MZ = as.numeric(MZ), INTENSITY = as.numeric(INTENSITY), SCAN= as.numeric(SCAN))
+
+    #Clean JAVA menory:
+    xlcFreeMemory()
+    #Export
+    write.xlsx2(tquery, file=file.path(getwd(), "Datos3/tquery.xlsx"), sheetName="sheet1", row.names=FALSE)
+    #We clean again: 
+    xlcFreeMemory()
+
+
+    #Run the rest of the programs. 
+    setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
+    source('Vseq_pre.R') #Ejecutamos Vseq_pre
+    setwd('..') #Volvemos al anterior directorio
+
+
+    #Open the tquery table and filter by MS
+
+    cat("\n El archivo Tquery se ha creado en la carpeta Datos. \n")
     
-    else{
-      data_type <- "DdS" #CAMBIAR SI ES UN DiS o DdS
-      experimento <- "SDR" 
-      break
+    #input_MZ <- 420
+
+    #CStdin mete todo como texto. Por eso 
+    repeat{
+      cat("\n Selecciona la masa Target que quieres buscar. Escribela y pulsa [ENTER]: \n")
+      input_MZ <- readLines(file("stdin"),1)
+
+      isnumber <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",input_MZ)
+
+      if (!isnumber){
+        cat("Esto no es un número")
+      }else if(input_MZ==""){
+        cat("Esto no es un número")
+      }else{
+        input_MZ<- as.numeric(input_MZ)
+        break
+      }
     }
-      
+
+    #input_tolerance <- 0.1
     
-    
-    
-    
+    repeat{
+      cat("Selecciona la tolerancia (Ventana de MS) que quieres buscar: \n")
+      input_tolerance <- as.numeric(readLines(file("stdin"),1)) 
+
+      isnumber2 <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",input_tolerance)
+
+      if (!isnumber2){
+        cat("Esto no es un número")
+      }else if(input_MZ==""){
+        cat("Esto no es un número")
+      }else {
+        input_tolerance<- as.numeric(input_tolerance)
+        break
+      }
+    }
+
+
+  
+
+  tquery2 <- data.frame(subset(tquery, tquery$MZ>(input_MZ-input_tolerance) & tquery$MZ<(input_MZ+input_tolerance)))
+
+  xlcFreeMemory()
+  #Export
+
+  write.xlsx2(tquery2, file=file.path(getwd(), "Datos3/tquery_filter.xlsx"), sheetName="sheet1", row.names=FALSE)
+  #We clean again: 
+  xlcFreeMemory()
+  
+  ## Iniciamos el siguiente programa Vseq_explorer.R 
+  
+  x <- data.frame(X1=tquery2$SCAN)
+  
+  #Run the rest of the programs. 
+  setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
+  source('Vseq_explorer.R') #Ejecutamos Vseq_pre
+  setwd('..') #Volvemos al anterior directorio
+
+  break
+
+}
+  else{
+    data_type <- "DdS" #CAMBIAR SI ES UN DiS o DdS
+    experimento <- "SDR" 
+    break
   }
-  
-  
-  cat("WELL DONE!!!")
+
+
+
+
+
+}
+
+
+cat("WELL DONE!!!")
