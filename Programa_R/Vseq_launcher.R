@@ -47,7 +47,7 @@
    
    
 xx = x
-varNamePath <- "E:\\R_graphs\\"
+#varNamePath <- "E:\\R_graphs\\"
 varconc2<- paste0(varNamePath,x[1],"_",x[length(x)],".xls")
 
 dtapar <- data.frame()
@@ -60,7 +60,8 @@ for (x in x)
   sn <- paste0("SCANS=", x)
   source("C:\\Users\\Administrador\\Desktop\\R_projects\\Vseq_project.R")
   
-     params[[x]] <-  data.frame(x, seq,mim, Charge, Xcorr, Escore, rt, DeltaMass, 
+     
+  params[[x]] <-  data.frame(x, seq,mim, Charge, Xcorr, Escore, rt, DeltaMass, 
                        prot, matched_ions, out_of, massspec)
      dtapar <- rbind(dtapar, params[[x]]) 
 }  

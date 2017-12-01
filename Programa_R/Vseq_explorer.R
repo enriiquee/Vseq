@@ -33,7 +33,24 @@ starttime <- Sys.time()
 ##  ##
 ##
 
-seq <- "LSETVAICR"
+
+repeat{
+  cat("\n Inserta la secuencia que quieres buscar. Escribela y pulsa [ENTER]: \n")
+  seq <- readLines(file("stdin"),1)
+  
+  isstring <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",seq)
+  
+  if (isstring){
+    cat("Esto es un número")
+  }else if(input_MZ==""){
+    cat("Esto no es una secuencia")
+  }else{
+    break
+  }
+}
+
+
+# seq <- "LSETVAICR"
 # seq <- "GLPDQMLYR"
 # seq <- "LTSSVTAYDYSGK"
 # seq <- "ADGVPIHLK"
@@ -44,7 +61,9 @@ seq <- "LSETVAICR"
 len<-nchar(seq)
 
 yy <- substr(seq, 1, len)
-print(yy)
+
+cat("La secuencia elegida es:", yy)
+#print(yy)
 yn <- strsplit(yy, "")
 z <- as.data.frame(yn)
 z<-as.matrix(z)
@@ -63,13 +82,14 @@ parental5c <- (parental + 4.0312)/5
 parental6c <- (parental + 5.0390)/6
 parental7c <- (parental + 6.0468)/7
 
-print(parental)
-print(parental2c)
-print(parental3c)
-print(parental4c)
-print(parental5c)
-print(parental6c)
-print(parental7c)
+
+# print(parental)
+# print(parental2c)
+# print(parental3c)
+# print(parental4c)
+# print(parental5c)
+# print(parental6c)
+# print(parental7c)
 
 
 
@@ -88,8 +108,7 @@ varconc3<- paste0(varNamePath,"SCAN=",snvar[1],"_",
                   "SCAN=",snvar[length(snvar)],"_",seq,experimento,".xls")
 
 
-pb <- winProgressBar(title=paste("Vseq_EXPLORER", "-", seq), 
-                     label="0% done", min=0, max=100, initial=0)
+#pb <- winProgressBar(title=paste("Vseq_EXPLORER", "-", seq), label="0% done", min=0, max=100, initial=0)
 
 count = 1
 

@@ -13,16 +13,17 @@ cat("Ejecutando... Puede tardar un poco... \n\n")
 
 #Installation of Packages that we need. 
 
-list.of.packages <- c("Maeswrap", "data.table", "ggplot2", "plotrix", 
+list.of.packages <- c("Maeswrap", "data.table", "ggplot2", "plotrix", "openxlsx", 
                       "reshape", "MASS", "gridExtra", "grid", "plotrix", 
-                      "rJava", "xlsx", "sqldf", "tcltk2", "dplyr", "oce", 
-                      "qpcR", "gdata", "tcR", "stats", "XLConnect", "readr", "readxl", "tidyr", "rJava", "progress")
+                      "rJava", "sqldf", "tcltk2", "dplyr", "oce", 
+                      "qpcR", "gdata", "tcR", "stats", "XLConnect", "readr", "readxl", "tidyr", "progress")
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
 print("Loading Packages...")
 #Load Packages
+library(openxlsx);
 library(Maeswrap);
 library(data.table);
 library(ggplot2);
@@ -33,7 +34,6 @@ library(gridExtra);
 library(grid);
 library(plotrix);
 library(rJava);
-library(xlsx);
 library(sqldf);
 library(tcltk2);
 library(dplyr);
@@ -46,7 +46,6 @@ library(stats);
 library(XLConnect);
 library(Biostrings);
 library(readr);
-library(readxl);
 library(tidyr);
 library(progress);
 

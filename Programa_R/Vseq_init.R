@@ -18,7 +18,7 @@ setwd('..')
 output_dir <- file.path(getwd(), "Datos3")
 output_dir2 <- file.path(getwd(), "Vseq_Graphs")
   
-if (!dir.exists(output_dir) & !dir.exists(output_dir2)){
+if (!dir.exists(output_dir) | !dir.exists(output_dir2)){
   dir.create(output_dir)
   dir.create(output_dir2)
   
@@ -103,10 +103,7 @@ repeat{
             "\t", escape_double = FALSE, col_names = FALSE, 
             trim_ws = TRUE, col_types = cols())
 
-
-
-
-
+    
     #################        Get the query file   ##################################
     #################################################################################
     ###################################################################################
@@ -136,7 +133,8 @@ repeat{
     #Clean JAVA menory:
     xlcFreeMemory()
     #Export
-    write.xlsx2(tquery, file=file.path(getwd(), "Datos3/tquery.xlsx"), sheetName="sheet1", row.names=FALSE)
+    #write.xlsx2(tquery, file=file.path(getwd(), "Datos3/tquery.xlsx"), sheetName="sheet1", row.names=FALSE)
+    write.xlsx(tquery, file=file.path(getwd(), "Datos3/tquery.xlsx"), sheetName="sheet1", row.names=FALSE)
     #We clean again: 
     xlcFreeMemory()
 
@@ -151,7 +149,7 @@ repeat{
 
     cat("\n El archivo Tquery se ha creado en la carpeta Datos. \n")
     
-    #input_MZ <- 420
+    input_MZ <- as.numeric(650)
 
     #CStdin mete todo como texto. Por eso 
     repeat{
@@ -170,7 +168,7 @@ repeat{
       }
     }
 
-    #input_tolerance <- 0.1
+    #input_tolerance <- as.numeric(650)
     
     repeat{
       cat("Selecciona la tolerancia (Ventana de MS) que quieres buscar: \n")
@@ -189,22 +187,26 @@ repeat{
     }
 
 
-  
-
-  tquery2 <- data.frame(subset(tquery, tquery$MZ>(input_MZ-input_tolerance) & tquery$MZ<(input_MZ+input_tolerance)))
+  tquery_test <- data.frame(subset(tquery, tquery$MZ>(input_MZ-input_tolerance) & tquery$MZ<(input_MZ+input_tolerance)))
 
   xlcFreeMemory()
   #Export
 
-  write.xlsx2(tquery2, file=file.path(getwd(), "Datos3/tquery_filter.xlsx"), sheetName="sheet1", row.names=FALSE)
+  write.xlsx(tquery_test, file=file.path(getwd(), "Datos3/tquery_filter.xlsx"), sheetName="sheet1", row.names=FALSE)
   #We clean again: 
   xlcFreeMemory()
   
   ## Iniciamos el siguiente programa Vseq_explorer.R 
   
-  x <- data.frame(X1=tquery2$SCAN)
+  x <- data.frame(X1=tquery_test$SCAN)
   
   #Run the rest of the programs. 
+  
+  #Path where the result will be saved. 
+  varNamePath <- file.path(getwd(), "Vseq_Graphs/")
+  
+  
+  
   setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
   source('Vseq_explorer.R') #Ejecutamos Vseq_pre
   setwd('..') #Volvemos al anterior directorio

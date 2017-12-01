@@ -7,6 +7,14 @@ seq2 <- strsplit(seq, NULL)[[1]]
 seq2 <- paste(rev(seq2), collapse='')
 #############################################            
 
+#Añadimos un path de ayuda
+
+infile = file.path(getwd(), "Datos3", infile[1]) ## datos de las fragmentaciones mgf
+
+infile2 = file.path(getwd(), "Datos3", infile2[1]) ##  datos del query SQL
+
+######################Arreglar skip=sn
+
 fr <- fread(infile,skip=sn); as.data.frame(fr)
 snc <- paste0(ww ,",")
 
