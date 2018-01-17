@@ -50,7 +50,7 @@ repeat{
 }
 
 
-# seq <- "LSETVAICR"
+ seq <- "VVHFIYIAILSQK"
 # seq <- "GLPDQMLYR"
 # seq <- "LTSSVTAYDYSGK"
 # seq <- "ADGVPIHLK"
@@ -111,9 +111,9 @@ varconc3<- paste0(varNamePath,"SCAN=",snvar[1],"_",
 #pb <- winProgressBar(title=paste("Vseq_EXPLORER", "-", seq), label="0% done", min=0, max=100, initial=0)
 
 count = 1
+setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
 
-for (ww in x)
-{
+for (ww in x){
   #################################################################################
   ##############################################################################
   ################################################################################
@@ -121,13 +121,13 @@ for (ww in x)
   sn <- paste0("SCANS=", ww)
   
   
-  setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
+  #setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
   source('Vseq_explorer_project2c.R') #Ejecutamos Vseq_pre
-  setwd('..') #Volvemos al anterior directorio
+  #setwd('..') #Volvemos al anterior directorio
   
   
   #source("C:\\Users\\Administrador\\Desktop\\R_projects\\Vseq_explorer_project2c.R")
-  #params <- data.frame(nrow=length(x))
+  params <- data.frame(nrow=length(x))
   params[[ww]] <-  data.frame(seq,mimMZ,ww,Escore,DeltaMass2c, DeltaMass3c, DeltaMass4c,
                               DeltaMass5c, DeltaMass6c, matched_ions, out_of)
   

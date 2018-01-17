@@ -8,14 +8,15 @@ seq2 <- paste(rev(seq2), collapse='')
 #############################################            
 
 #Añadimos un path de ayuda
+setwd('..') #Volvemos al anterior directorio
+infile_1 = file.path(getwd(), "Datos3", infile[1]) ## datos de las fragmentaciones mgf
 
-infile = file.path(getwd(), "Datos3", infile[1]) ## datos de las fragmentaciones mgf
-
-infile2 = file.path(getwd(), "Datos3", infile2[1]) ##  datos del query SQL
+#Este path no es necesario
+#infile_2 = file.path(getwd(), "Datos3", infile2[1]) ##  datos del query SQL
 
 ######################Arreglar skip=sn
-
-fr <- fread(infile,skip=sn); as.data.frame(fr)
+print(skip)
+fr <- fread(infile_1,skip=sn); as.data.frame(fr)
 snc <- paste0(ww ,",")
 
 fr<-as.data.frame(fr)

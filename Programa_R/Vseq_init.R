@@ -149,7 +149,7 @@ repeat{
 
     cat("\n El archivo Tquery se ha creado en la carpeta Datos. \n")
     
-    input_MZ <- as.numeric(650)
+    input_MZ <- as.numeric(1530)
 
     #CStdin mete todo como texto. Por eso 
     repeat{
@@ -168,7 +168,7 @@ repeat{
       }
     }
 
-    #input_tolerance <- as.numeric(650)
+    input_tolerance <- as.numeric(1)
     
     repeat{
       cat("Selecciona la tolerancia (Ventana de MS) que quieres buscar: \n")
@@ -188,6 +188,25 @@ repeat{
 
 
   tquery_test <- data.frame(subset(tquery, tquery$MZ>(input_MZ-input_tolerance) & tquery$MZ<(input_MZ+input_tolerance)))
+  
+  repeat{
+    cat("Selecciona la carga que tiene ese peptido: \n")
+    input_tolerance <- as.numeric(readLines(file("stdin"),1)) 
+    
+    isnumber2 <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",input_tolerance)
+    
+    if (!isnumber2){
+      cat("Esto no es un número")
+    }else if(input_MZ==""){
+      cat("Esto no es un número")
+    }else {
+      input_tolerance<- as.numeric(input_tolerance)
+      break
+    }
+  }
+  
+  
+  tquery_test <- tquery_test[tquery_test$CHARGE == 'CHARGE=2+',]
 
   xlcFreeMemory()
   #Export
