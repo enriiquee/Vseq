@@ -1,6 +1,6 @@
 #Starting the program... 
 
-options(warn = -1)
+#options(warn = -1)
 cat("Ejecutando... Puede tardar un poco... \n\n")
 
 #starttime <- Sys.time()

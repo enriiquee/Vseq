@@ -28,10 +28,11 @@ if (!dir.exists(output_dir) | !dir.exists(output_dir2)){
   
   
 repeat{
-  cat("¿Que tipo de datos tienes, DiS o DdS? Por defecto se suele seleccionar DiS.\n ")
+  cat("?Que tipo de datos tienes, DiS o DdS? Por defecto se suele seleccionar DiS.\n ")
   cat("1. DiS | 2. DdS\n")
-  input_answer <- readLines(file("stdin"),1)#enter "yes"
-
+  #input_answer <- readline()#enter "yes"
+  input_answer <- readline()#enter "yes"
+  
   if (input_answer=="DiS" | input_answer==1 )  {
 
     #readline(prompt="\n Mete en la carpeta Datos el archivo xlsx exportado de cualquier motor de busqueda y el mgf. 
@@ -40,7 +41,7 @@ repeat{
     repeat{
       cat("\n Mete en la carpeta Datos el archivo .xlsx exportado de cualquier motor de busqueda y el mgf. 
       \n Press [enter] to continue")
-      word <- readLines(file("stdin"),1) 
+      word <- readline() 
       if (word==""){
       break
       }
@@ -56,19 +57,17 @@ repeat{
       infile <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.mgf$") 
       infile2 <- list.files(file.path(getwd(), "Datos3"), pattern = "\\.xlsx$") 
       if (length(infile)<1){
-        cat("El archivo mgf no está en la carpeta Datos. Mete el archivo y pulsa [ENTER] \n")
+        cat("El archivo mgf no est? en la carpeta Datos. Mete el archivo y pulsa [ENTER] \n")
         repeat{
-          word <- readLines(file("stdin"),1) 
+          word <- readline() 
           if (word==""){
             break
           }
         }
-      }
-      
-      else if (length(infile2)<1){
+      } else if (length(infile2)<1){
       cat("El archivo Excel no existe en la carpeta Datos. Mete el archivo y pulsa [ENTER] \n")
         repeat{
-          word <- readLines(file("stdin"),1) 
+          word <- readline() 
           if (word==""){
             break
           }
@@ -76,9 +75,9 @@ repeat{
       }
 
       else if (length(infile)>1 | length(infile2)>1){
-        cat("Hay más de un archivo mgf o xlsx en la carpeta datos. Elimina los archivos extra y pulsa [ENTER] \n")
+        cat("Hay m?s de un archivo mgf o xlsx en la carpeta datos. Elimina los archivos extra y pulsa [ENTER] \n")
         repeat{
-          word <- readLines(file("stdin"),1) 
+          word <- readline() 
           if (word==""){
             break
           }
@@ -90,7 +89,7 @@ repeat{
       }
 
       else{
-        cat("Hay algún problema con los archivos. Revisa que todo esté bien")
+        cat("Hay alg?n problema con los archivos. Revisa que todo est? bien")
       }
     }
 
@@ -149,37 +148,37 @@ repeat{
 
     cat("\n El archivo Tquery se ha creado en la carpeta Datos. \n")
     
-    input_MZ <- as.numeric(1530)
+    #input_MZ <- as.numeric(1530)
 
     #CStdin mete todo como texto. Por eso 
     repeat{
       cat("\n Selecciona la masa Target que quieres buscar. Escribela y pulsa [ENTER]: \n")
-      input_MZ <- readLines(file("stdin"),1)
+      input_MZ <- readline()
 
       isnumber <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",input_MZ)
 
       if (!isnumber){
-        cat("Esto no es un número")
+        cat("Esto no es un n?mero")
       }else if(input_MZ==""){
-        cat("Esto no es un número")
+        cat("Esto no es un n?mero")
       }else{
         input_MZ<- as.numeric(input_MZ)
         break
       }
     }
 
-    input_tolerance <- as.numeric(1)
+    #input_tolerance <- as.numeric(1)
     
     repeat{
       cat("Selecciona la tolerancia (Ventana de MS) que quieres buscar: \n")
-      input_tolerance <- as.numeric(readLines(file("stdin"),1)) 
+      input_tolerance <- as.numeric(readline()) 
 
       isnumber2 <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",input_tolerance)
 
       if (!isnumber2){
-        cat("Esto no es un número")
+        cat("Esto no es un n?mero")
       }else if(input_MZ==""){
-        cat("Esto no es un número")
+        cat("Esto no es un n?mero")
       }else {
         input_tolerance<- as.numeric(input_tolerance)
         break
@@ -191,22 +190,35 @@ repeat{
   
   repeat{
     cat("Selecciona la carga que tiene ese peptido: \n")
-    input_tolerance <- as.numeric(readLines(file("stdin"),1)) 
+    charge <- as.numeric(readline()) 
     
-    isnumber2 <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",input_tolerance)
+    isnumber2 <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",charge)
     
     if (!isnumber2){
-      cat("Esto no es un número")
+      cat("Esto no es un n?mero")
     }else if(input_MZ==""){
-      cat("Esto no es un número")
+      cat("Esto no es un n?mero")
     }else {
       input_tolerance<- as.numeric(input_tolerance)
       break
     }
   }
   
+  if(charge==1){
+    tquery_test <- tquery_test[tquery_test$CHARGE == 'CHARGE=1+',]
+  }else if(charge==2){
+    tquery_test <- tquery_test[tquery_test$CHARGE == 'CHARGE=2+',]
+  }else if(charge==3){
+    tquery_test <- tquery_test[tquery_test$CHARGE == 'CHARGE=3+',]
+  }else if(charge==4){
+    tquery_test <- tquery_test[tquery_test$CHARGE == 'CHARGE=4+',]
+  }else if(charge==5){
+    tquery_test <- tquery_test[tquery_test$CHARGE == 'CHARGE=5+',]
+  }else if(charge==6){
+    tquery_test <- tquery_test[tquery_test$CHARGE == 'CHARGE=6+',]
+  }
   
-  tquery_test <- tquery_test[tquery_test$CHARGE == 'CHARGE=2+',]
+
 
   xlcFreeMemory()
   #Export
