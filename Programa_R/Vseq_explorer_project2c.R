@@ -6,17 +6,12 @@
 seq2 <- strsplit(seq, NULL)[[1]]
 seq2 <- paste(rev(seq2), collapse='')
 #############################################            
-
-#Añadimos un path de ayuda
+#Cambiamos directorio: 
 setwd('..') #Volvemos al anterior directorio
-infile_1 = file.path(getwd(), "Datos3", infile[1]) ## datos de las fragmentaciones mgf
+setwd(file.path(getwd(),"Datos3/")) #Seleccionamos el Path donde se encuentra el archivo
 
-#Este path no es necesario
-#infile_2 = file.path(getwd(), "Datos3", infile2[1]) ##  datos del query SQL
 
-######################Arreglar skip=sn
-print(skip)
-fr <- fread(infile_1,skip=sn); as.data.frame(fr)
+fr <- fread(infile,skip=sn); as.data.frame(fr)
 snc <- paste0(ww ,",")
 
 fr<-as.data.frame(fr)
@@ -38,7 +33,7 @@ tpar<-unlist(lapply(pas,
 
 
 
-mim <- subset(tquery, SCAN==snc)
+mim <- subset(tquery, SCAN==ww)
 mimMZ <- mim[,2]
 
 DeltaMass2c = mimMZ - parental2c
@@ -55,7 +50,7 @@ DeltaMass7c = mimMZ - parental7c
 # print(DeltaMass6c)
 # print(DeltaMass7c)
 
-###    preparando matriz de fragmentos teóricos    ###
+###    preparando matriz de fragmentos te?ricos    ###
 
 
 ######      calculate y series     #############
@@ -183,7 +178,7 @@ if(ncol(fppm)==0)
 
 fppm <- fppm[,ncol(fppm):1]
 
-####    selecciona el máximo error en ppm que se va a tener en cuenta     #####
+####    selecciona el m?ximo error en ppm que se va a tener en cuenta     #####
 
 fppm <- ifelse(fppm>50,50,fppm)  ### convierte todos los valores mayores de 50 en 50
 

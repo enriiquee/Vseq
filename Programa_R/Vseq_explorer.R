@@ -36,12 +36,12 @@ starttime <- Sys.time()
 
 repeat{
   cat("\n Inserta la secuencia que quieres buscar. Escribela y pulsa [ENTER]: \n")
-  seq <- readLines(file("stdin"),1)
+  seq <- readline()
   
   isstring <- grepl("^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$",seq)
   
   if (isstring){
-    cat("Esto es un número")
+    cat("Esto es un n?mero")
   }else if(input_MZ==""){
     cat("Esto no es una secuencia")
   }else{
@@ -104,30 +104,39 @@ parental7c <- (parental + 6.0468)/7
 ###################################################################################
 snvar = x
 
+#setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
+
+varNamePath <- file.path(getwd(),"Vseq_Graphs/")
+experimento <- "test_1"
+
 varconc3<- paste0(varNamePath,"SCAN=",snvar[1],"_",
                   "SCAN=",snvar[length(snvar)],"_",seq,experimento,".xls")
 
 
-#pb <- winProgressBar(title=paste("Vseq_EXPLORER", "-", seq), label="0% done", min=0, max=100, initial=0)
+pb <- winProgressBar(title=paste("Vseq_EXPLORER", "-", seq), label="0% done", min=0, max=100, initial=0)
 
 count = 1
 setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
+params <- data.frame(nrow=length(x))
+
 
 for (ww in x){
+  
   #################################################################################
   ##############################################################################
   ################################################################################
   ##################################################################################
   sn <- paste0("SCANS=", ww)
-  
-  
-  #setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
-  source('Vseq_explorer_project2c.R') #Ejecutamos Vseq_pre
+  print(typeof(sn))
+  print(sn)
   #setwd('..') #Volvemos al anterior directorio
+  setwd(file.path(getwd(),"Programa_R/")) #Seleccionamos el Path donde se encuentra el archivo
+  source('Vseq_explorer_project2c.R') #Ejecutamos Vseq_pre
+  setwd('..') #Volvemos al anterior directorio
   
   
   #source("C:\\Users\\Administrador\\Desktop\\R_projects\\Vseq_explorer_project2c.R")
-  params <- data.frame(nrow=length(x))
+  #params <- data.frame(nrow=length(x))
   params[[ww]] <-  data.frame(seq,mimMZ,ww,Escore,DeltaMass2c, DeltaMass3c, DeltaMass4c,
                               DeltaMass5c, DeltaMass6c, matched_ions, out_of)
   

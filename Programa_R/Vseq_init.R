@@ -223,7 +223,7 @@ repeat{
   xlcFreeMemory()
   #Export
 
-  write.xlsx(tquery_test, file=file.path(getwd(), "Datos3/tquery_filter.xlsx"), sheetName="sheet1", row.names=FALSE)
+  write.xlsx(tquery_test, file=file.path(getwd(), "Datos3/tquery_explorer.xlsx"), sheetName="sheet1", row.names=FALSE)
   #We clean again: 
   xlcFreeMemory()
   
